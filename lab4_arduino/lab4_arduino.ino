@@ -1,17 +1,32 @@
-#include <LiquidCrystal.h>
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+const int trigPin = 1;
+const int echoPin = 2;
+long duration;
+int distanceCm, distanceInch;
+const int R1 = 1/58;
+const int R2 = 1/148;
+const int C = 10;
 
 void setup() {
-  // put your setup code here, to run once:
-  lcd.begin(16, 2); //Initiate the LCD in a 16x2 configuration
-  lcd.print("My name is:");
-  lcd.setCursor(0, 1);
-  lcd.print("JJ Kian");
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  delay(50); //Wait 50 ms
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(C);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distanceCm = duration * R1;
+  distanceInch = duration * R2;
+  Serial.print("Distance: ");
+  Serial.print(distanceCm);
+  Serial.print(" cm/");
+  Serial.print(distanceInch);
+  Serial.println(" in");
+  delay(1000);
 }
 
 
